@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter original images
 // @namespace    http://tampermonkey.net/
-// @version      0.721
+// @version      10721
 // @description  View original quality images.
 // @author       lolion1y
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
@@ -9,6 +9,7 @@
 // @match        https://twitter.com/*
 // @match        https://mobile.twitter.com/*
 // @match        https://pbs.twimg.com/media/*
+// @run-at       document-end
 // ==/UserScript==
 
 (function () {
@@ -32,22 +33,24 @@
                 image.src = originUrl;
             }
         });
-    };
 
-    const observerCallback = (mutationsList) => {
-        const processedNodes = new Set();
-        mutationsList.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE && !processedNodes.has(node)) {
-                    replaceImageUrls(node);
-                    processedNodes.add(node);
-                }
-            });
+/*
+        const divs = target.querySelectorAll('div');
+        divs.forEach((div) => {
+            const backgroundImage = div.style.backgroundImage.match(/url\(([^)]+)\)/);
+            const originalUrl = getOriginUrl(backgroundImage ? backgroundImage[1] : '');
+            if (originalUrl) {
+                div.style.backgroundImage = `url(${originalUrl})`;
+            }
         });
+*/
     };
 
-    const observer = new MutationObserver(observerCallback);
+    const observer = new MutationObserver(() => {
+        replaceImageUrls(document);
+    });
+
     observer.observe(document.body, { childList: true, subtree: true });
 
-    replaceImageUrls(document.body);
+    replaceImageUrls(document);
 })();
