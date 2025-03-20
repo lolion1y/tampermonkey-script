@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Disable twitter vibrate
 // @namespace    http://tampermonkey.net/
-// @version      0.721
+// @version      0721
 // @description  Disable twitter vibrate for mobile
 // @author       lolion1y
 // @match        https://twitter.com/*
@@ -9,9 +9,9 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
     if (navigator.vibrate) {
-        navigator.vibrate = function() {};
+        navigator.vibrate = function () { };
     }
 })();

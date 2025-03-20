@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         One Click Copy Link Button for Twitter(X)
 // @namespace    http://tampermonkey.net/
-// @version      2.4
+// @version      2.3.2
 // @description  Add a button to copy the URL of a tweet on Twitter without clicking dropdown. Default to twitter but customizable.
 // @author       lolion1y
 // @match        https://twitter.com/*
@@ -12,11 +12,15 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
 
-    const baseUrl = 'https://twitter.com';
+    const config = {
+        like: true,
+        retweet: true
+    }
 
+    const baseUrl = 'https://twitter.com';
     const defaultSVG = '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard" viewBox="0 0 24 24" stroke-width="2" stroke="#71767C" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>';
     const copiedSVG = '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-check" viewBox="0 0 24 24" stroke-width="2" stroke="#00abfb" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 14l2 2l4 -4" /></svg>';
 
@@ -44,18 +48,22 @@
                                 console.log('Tweet link copied!');
                                 copyIcon.innerHTML = copiedSVG;
 
-                                const retweetButton = tweet.querySelector('button[data-testid="retweet"]');
-                                const likeButton = tweet.querySelector('button[data-testid="like"]');
-
-                                if (retweetButton) {
-                                    retweetButton.click();
-                                    console.log('Tweet retweeted!');
+                                if (config.like) {
+                                    const likeButton = tweet.querySelector('button[data-testid="like"]');
+                                    if (likeButton) {
+                                        likeButton.click();
+                                        console.log('Tweet liked!');
+                                    }
                                 }
 
-                                if (likeButton) {
-                                    likeButton.click();
-                                    console.log('Tweet liked!');
+                                if (config.retweet) {
+                                    const retweetButton = tweet.querySelector('button[data-testid="retweet"]');
+                                    if (retweetButton && config.retweet) {
+                                        retweetButton.click();
+                                        console.log('Tweet retweeted!');
+                                    }
                                 }
+
                             })
                             .catch(err => console.error('Error copying link: ', err));
                     }

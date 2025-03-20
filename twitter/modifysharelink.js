@@ -13,7 +13,7 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
 
     const convertUrl = (url) => {
@@ -30,7 +30,7 @@
         }
     };
 
-    document.addEventListener('copy', function(e) {
+    document.addEventListener('copy', function (e) {
         const selectedText = window.getSelection().toString().trim();
         if (selectedText.includes('x.com')) {
             e.preventDefault();
