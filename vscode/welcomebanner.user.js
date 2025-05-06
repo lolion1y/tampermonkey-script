@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         Disable VSCode web welcome banner
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Put the welcome banner dismissed flag on first visit
 // @author       lolion1y
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=vscode.dev
 // @match        *://*.vscode.dev/*
 // @match        *://*.github.dev/*
 // @grant        none
+// @run-at       document-end
 // ==/UserScript==
 
 (function () {
@@ -69,8 +70,5 @@
         }
     }
 
-    // after the page loads
-    window.addEventListener('load', () => {
-        writeDismissedFlag();
-    });
+    writeDismissedFlag();
 })();
