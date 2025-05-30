@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Disable VSCode web welcome banner
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Put the welcome banner dismissed flag on first visit
 // @author       lolion1y
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=vscode.dev
@@ -40,18 +40,14 @@
         try {
             const db = await openDB();
 
-            // check if the flag is already exists
-            const exists = await checkFlagExists(db);
-            if (exists === "true") {
+            if (await checkFlagExists(db) === "true") {
                 console.log('Welcome banner dismissed flag already exists. No action needed.');
                 db.close();
                 return;
             }
 
-            // put the flag
             const tx = db.transaction(STORE_NAME, 'readwrite');
-            const store = tx.objectStore(STORE_NAME);
-            store.put("true", KEY);
+            tx.objectStore(STORE_NAME).put("true", KEY);
 
             return new Promise((resolve, reject) => {
                 tx.oncomplete = () => {
