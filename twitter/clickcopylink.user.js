@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         One Click Copy Link Button for Twitter(X)
 // @namespace    http://tampermonkey.net/
-// @version      2.3.6
+// @version      2.3.6-1
 // @description  Add a button to copy the URL of a tweet on Twitter without clicking dropdown. Default to twitter but customizable.
 // @author       lolion1y
 // @match        https://twitter.com/*
@@ -69,7 +69,7 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
                 copyIcon.classList.add('custom-copy-icon');
                 copyIcon.setAttribute('aria-label', 'Copy link');
                 copyIcon.setAttribute('role', 'button');
-                copyIcon.style.cssText = 'display: flex; align-items: center; justify-content: center; border-radius: 9999px; transition-duration: 0.2s; cursor: pointer; padding: 0px 8px; margin: 0px -8px;';
+                copyIcon.style.cssText = 'display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; transition-duration: 0.2s; cursor: pointer; padding: 8px; margin: -8px;';
                 copyIcon.innerHTML = defaultSVG;
 
                 copyIcon.addEventListener('click', (event) => {
