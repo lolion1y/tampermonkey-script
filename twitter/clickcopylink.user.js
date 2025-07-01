@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         One Click Copy Link Button for Twitter(X)
 // @namespace    http://tampermonkey.net/
-// @version      2.3.6-1
+// @version      2.3.7-1
 // @description  Add a button to copy the URL of a tweet on Twitter without clicking dropdown. Default to twitter but customizable.
 // @author       lolion1y
 // @match        https://twitter.com/*
