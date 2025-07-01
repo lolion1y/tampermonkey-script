@@ -22,7 +22,6 @@
         like: true,
         retweet: true
     };
-
     const config = {
         like: GM_getValue("like", defaultconfig.like),
         retweet: GM_getValue("retweet", defaultconfig.retweet)
