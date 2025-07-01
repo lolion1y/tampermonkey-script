@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter original images
 // @namespace    http://tampermonkey.net/
-// @version      1.5
+// @version      1.6-1
 // @description  View original quality images.
 // @author       lolion1y
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
@@ -88,4 +88,5 @@ Current: ${config.preview ? 'Enabled' : 'Disabled'}`);
         replaceImgUrl();
     });
     observer.observe(document.body, { childList: true, subtree: true });
+    replaceImgUrl();
 })();
