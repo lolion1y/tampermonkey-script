@@ -3,7 +3,7 @@
 // @namespace    https://greasyfork.org/zh-CN/scripts/26430-dmhy-tree-view
 // @license      GPL version 3
 // @encoding     utf-8
-// @version      0.35.1
+// @version      0.35.2
 // @date         2017/01/11
 // @modified     2025/09/07
 // @description  convert plain file list into a tree view for 动漫花园 (share.dmhy.org)
