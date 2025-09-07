@@ -12,6 +12,8 @@
 // @require      https://cdn.jsdelivr.net/npm/jstree@3.3.11/dist/jstree.min.js
 // @resource     customCSS https://cdn.jsdelivr.net/npm/jstree@3.3.11/dist/themes/default/style.min.css
 // @match        *://share.dmhy.org/topics/view/*
+// @match        *://dmhy.org/topics/view/*
+// @match        *://www.dmhy.org/topics/view/*
 // @match        *://dmhy.anoneko.com/topics/view/*
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
