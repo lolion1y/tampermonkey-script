@@ -45,7 +45,7 @@ https://raw.githubusercontent.com/lolion1y/tampermonkey-script/refs/heads/main/v
 
 • fix icon
 
-• change cdn to cf
+• change cdn to `cdn.jsdelivr.net`
 
 [Install](https://www.tampermonkey.net/script_installation.php#url=https://raw.githubusercontent.com/lolion1y/tampermonkey-script/refs/heads/main/dmhy/treeview.user.js)
 
