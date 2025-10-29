@@ -22,15 +22,6 @@ https://raw.githubusercontent.com/lolion1y/tampermonkey-script/refs/heads/main/t
 https://raw.githubusercontent.com/lolion1y/tampermonkey-script/refs/heads/main/twitter/modifysharelink.user.js
 ```
 
-## moegirl
-> copy
-
-[Install](https://www.tampermonkey.net/script_installation.php#url=https://raw.githubusercontent.com/lolion1y/tampermonkey-script/refs/heads/main/moegirl/copy.user.js)
-
-```
-https://raw.githubusercontent.com/lolion1y/tampermonkey-script/refs/heads/main/moegirl/copy.user.js
-```
-
 ## VSCode
 > Disable web welcome banner[^3]
 
