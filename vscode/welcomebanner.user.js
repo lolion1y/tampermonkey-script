@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Disable VSCode web welcome banner
 // @namespace    http://tampermonkey.net/
-// @version      0.3
-// @description  Put the welcome banner dismissed flag on first visit
+// @version      0.4
+// @description  Put the welcome banner dismissed flag
 // @author       lolion1y
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=vscode.dev
 // @match        *://*.vscode.dev/*
@@ -14,57 +14,19 @@
 (function () {
     'use strict';
 
-    const DB_NAME = 'vscode-web-state-db-global';
-    const STORE_NAME = 'ItemTable';
-    const KEY = 'workbench.banner.welcome.dismissed';
+    const request = indexedDB.open('vscode-web-state-db-global');
 
-    function openDB() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(DB_NAME);
-            request.onerror = () => reject(request.error);
-            request.onsuccess = () => resolve(request.result);
-        });
-    }
+    request.onsuccess = function(event) {
+        const db = event.target.result;
+        const transaction = db.transaction(['ItemTable'], 'readwrite');
+        const objectStore = transaction.objectStore('ItemTable');
 
-    async function checkFlagExists(db) {
-        return new Promise((resolve, reject) => {
-            const tx = db.transaction(STORE_NAME, 'readonly');
-            const store = tx.objectStore(STORE_NAME);
-            const getRequest = store.get(KEY);
-            getRequest.onsuccess = () => resolve(getRequest.result);
-            getRequest.onerror = () => reject(getRequest.error);
-        });
-    }
+        objectStore.put("true", "workbench.banner.welcome.dismissed").onerror = function(e) {
+            console.error('put error:', e);
+        };
+    };
 
-    async function writeDismissedFlag() {
-        try {
-            const db = await openDB();
-
-            if (await checkFlagExists(db) === "true") {
-                console.log('Welcome banner dismissed flag already exists. No action needed.');
-                db.close();
-                return;
-            }
-
-            const tx = db.transaction(STORE_NAME, 'readwrite');
-            tx.objectStore(STORE_NAME).put("true", KEY);
-
-            return new Promise((resolve, reject) => {
-                tx.oncomplete = () => {
-                    db.close();
-                    console.log('Welcome banner dismissed flag put successfully. Banner will not show.');
-                    resolve();
-                };
-                tx.onerror = () => {
-                    db.close();
-                    console.error('Failed to write welcome banner dismissed flag:', tx.error);
-                    reject(tx.error);
-                };
-            });
-        } catch (e) {
-            console.error('IndexedDB operation failed:', e);
-        }
-    }
-
-    writeDismissedFlag();
+    request.onerror = function(event) {
+        console.error('db error:', event);
+    };
 })();
