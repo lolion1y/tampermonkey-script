@@ -60,7 +60,7 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
                 copyIcon.classList.add('custom-copy-icon');
                 copyIcon.setAttribute('aria-label', 'Copy link');
                 copyIcon.setAttribute('role', 'button');
-                copyIcon.style.cssText = 'display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; transition-duration: 0.2s; cursor: pointer; padding: 8px; margin: -8px;';
+                copyIcon.style.cssText = 'display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; transition-duration: 0.2s; cursor: pointer; padding: 0px 16px 0px 8px; margin: 0px -16px 0px -8px;';
                 copyIcon.innerHTML = defaultSVG;
 
                 copyIcon.addEventListener('click', async (event) => {
