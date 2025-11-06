@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         One Click Copy Link Button for Twitter(X)
 // @namespace    http://tampermonkey.net/
-// @version      2.3.7-2
+// @version      2.3.8
 // @description  Add a button to copy the URL of a tweet on Twitter without clicking dropdown. Default to twitter but customizable.
 // @author       lolion1y
 // @match        https://twitter.com/*
@@ -63,29 +63,30 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
                 copyIcon.style.cssText = 'display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; transition-duration: 0.2s; cursor: pointer; padding: 8px; margin: -8px;';
                 copyIcon.innerHTML = defaultSVG;
 
-                copyIcon.addEventListener('click', (event) => {
+                copyIcon.addEventListener('click', async (event) => {
                     event.stopPropagation();
                     const tweetUrl = extractTweetUrl(tweet);
-                    if (tweetUrl) {
-                        navigator.clipboard.writeText(tweetUrl)
-                            .then(() => {
-                                console.log('Tweet link copied!');
-                                copyIcon.innerHTML = copiedSVG;
-                                if (config.like) {
-                                    const likeButton = tweet.querySelector('button[data-testid="like"]');
-                                    if (likeButton) {
-                                        likeButton.click();
-                                    }
-                                }
-                                if (config.retweet) {
-                                    const retweetButton = tweet.querySelector('button[data-testid="retweet"]');
-                                    if (tweet.querySelector('button[data-testid="like"]') && retweetButton) {
-                                        retweetButton.click();
-                                    }
-                                }
-
-                            })
-                            .catch(err => console.error('Error copying link: ', err));
+                    if (!tweetUrl) return;
+                    try {
+                        await navigator.clipboard.writeText(tweetUrl)
+                        console.log('Tweet link copied!');
+                        copyIcon.innerHTML = copiedSVG;
+                        if (config.like) {
+                            const likeButton = tweet.querySelector('button[data-testid="like"]');
+                            if (likeButton) {
+                                likeButton.click();
+                            }
+                        }
+                        if (config.retweet) {
+                            const retweetButton = tweet.querySelector('button[data-testid="retweet"]');
+                            if (tweet.querySelector('button[data-testid="like"]') && retweetButton) {
+                                await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300));
+                                retweetButton.click();
+                            }
+                        }
+                    }
+                    catch (err) {
+                        console.error('Error copying link: ', err);
                     }
                 });
 
