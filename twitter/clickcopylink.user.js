@@ -18,13 +18,9 @@
 (function () {
     'use strict';
 
-    const defaultconfig = {
-        like: true,
-        retweet: true
-    };
     const config = {
-        like: GM_getValue("like", defaultconfig.like),
-        retweet: GM_getValue("retweet", defaultconfig.retweet)
+        like: GM_getValue("like", true),
+        retweet: GM_getValue("retweet", true)
     };
 
     GM_registerMenuCommand(`Like (Current: ${config.like ? 'Enabled' : 'Disabled'})`, () => {
@@ -32,11 +28,9 @@
 Current: ${config.like ? 'Enabled' : 'Disabled'}`);
         if (userConfirm) {
             config.like = !config.like;
-            if (config.like === defaultconfig.like) {
-                GM_deleteValue('like');
-            } else {
-                GM_setValue('like', config.like);
-            }
+            config.like !== true
+                ? GM_setValue('like', config.like)
+                : GM_deleteValue('like');
         }
     });
 
@@ -45,11 +39,9 @@ Current: ${config.like ? 'Enabled' : 'Disabled'}`);
 Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
         if (userConfirm) {
             config.retweet = !config.retweet;
-            if (config.retweet === defaultconfig.retweet) {
-                GM_deleteValue('retweet');
-            } else {
-                GM_setValue('retweet', config.retweet);
-            }
+            config.retweet !== true
+                ? GM_setValue('retweet', config.retweet)
+                : GM_deleteValue('retweet');
         }
     });
 
@@ -60,8 +52,8 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
     function addCopyButtonToTweets() {
         const tweets = document.querySelectorAll('button[data-testid="like"], button[data-testid="unlike"]');
 
-        tweets.forEach(likeButton => {
-            const parentDiv = likeButton.parentElement;
+        tweets.forEach(buttonDiv => {
+            const parentDiv = buttonDiv.parentElement;
             const tweet = (parentDiv.closest('article[data-testid="tweet"]') || parentDiv.closest('div[role="group"]'));
             if (tweet && !tweet.querySelector('.custom-copy-icon')) {
                 const copyIcon = document.createElement('div');
@@ -81,11 +73,13 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
                                 copyIcon.innerHTML = copiedSVG;
                                 if (config.like) {
                                     const likeButton = tweet.querySelector('button[data-testid="like"]');
-                                    likeButton.click();
+                                    if (likeButton) {
+                                        likeButton.click();
+                                    }
                                 }
                                 if (config.retweet) {
                                     const retweetButton = tweet.querySelector('button[data-testid="retweet"]');
-                                    if (tweet.querySelector('button[data-testid="like"]')) {
+                                    if (tweet.querySelector('button[data-testid="like"]') && retweetButton) {
                                         retweetButton.click();
                                     }
                                 }
@@ -104,8 +98,8 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
     }
 
     function extractTweetUrl(tweetElement) {
-        const linkElement = tweetElement.querySelector('a[href*="/status/"] > time');
 
+        const linkElement = tweetElement.querySelector('a[href*="/status/"] > time');
         if (linkElement) {
             let url = linkElement.parentElement.getAttribute('href');
             if (!url.startsWith('/')) {
