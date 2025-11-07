@@ -84,9 +84,8 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
                                 retweetButton.click();
                             }
                         }
-                    }
-                    catch (err) {
-                        console.error('Error copying link: ', err);
+                    } catch (e) {
+                        console.error('Error copying link: ', e);
                     }
                 });
 
