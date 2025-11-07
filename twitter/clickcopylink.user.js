@@ -80,7 +80,7 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
                         if (config.retweet) {
                             const retweetButton = tweet.querySelector('button[data-testid="retweet"]');
                             if (tweet.querySelector('button[data-testid="like"]') && retweetButton) {
-                                await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300));
+                                await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 200));
                                 retweetButton.click();
                             }
                         }
