@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter original images
 // @namespace    http://tampermonkey.net/
-// @version      1.6-1
+// @version      1.7
 // @description  View original quality images.
 // @author       lolion1y
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
@@ -19,14 +19,9 @@
 (function () {
     'use strict';
 
-    const defaultconfig = {
-        fullsize: true,
-        preview: false
-    };
-
     const config = {
-        fullsize: GM_getValue("fullsize", defaultconfig.fullsize),
-        preview: GM_getValue("preview", defaultconfig.preview)
+        fullsize: GM_getValue("fullsize", true),
+        preview: GM_getValue("preview", false)
     };
 
     GM_registerMenuCommand(`Fullsize (Current: ${config.fullsize ? 'Enabled' : 'Disabled'})`, () => {
@@ -34,11 +29,9 @@
 Current: ${config.fullsize ? 'Enabled' : 'Disabled'}`);
         if (userConfirm) {
             config.fullsize = !config.fullsize;
-            if (config.fullsize === defaultconfig.fullsize) {
-                GM_deleteValue('fullsize');
-            } else {
-                GM_setValue('fullsize', config.fullsize);
-            }
+            config.fullsize !== true
+                ? GM_setValue('fullsize', config.fullsize)
+                : GM_deleteValue('fullsize');
         }
     });
 
@@ -47,24 +40,22 @@ Current: ${config.fullsize ? 'Enabled' : 'Disabled'}`);
 Current: ${config.preview ? 'Enabled' : 'Disabled'}`);
         if (userConfirm) {
             config.preview = !config.preview;
-            if (config.preview === defaultconfig.preview) {
-                GM_deleteValue('preview');
-            } else {
-                GM_setValue('preview', config.preview);
-            }
+            config.preview !== false
+                ? GM_setValue('preview', config.preview)
+                : GM_deleteValue('preview');
         }
     });
 
     const getOrigImgUrl = (imgUrl) => {
         const match = imgUrl.match(/https:\/\/(pbs\.twimg\.com\/media\/[a-zA-Z0-9\-\_]+)(\?format=|\.)(jpg|png|webp)/);
-        if (!match || /name=orig/.test(imgUrl)) return null;
+        if (!match) return;
         const format = match[3] === 'webp' ? 'jpg' : match[3];
         return `https://${match[1]}.${format}?name=orig`;
     };
 
     const replaceImgUrl = () => {
         if (config.fullsize) {
-            const images = document.querySelectorAll('body [data-testid="tweetPhoto"] img,[data-testid="swipe-to-dismiss"] img');
+            const images = document.querySelectorAll('[data-testid="tweetPhoto"] img,[data-testid="swipe-to-dismiss"] img');
             images.forEach((image) => {
                 const tweetImgUrl = getOrigImgUrl(image.src);
                 if (tweetImgUrl && image.src !== tweetImgUrl) {
@@ -73,20 +64,18 @@ Current: ${config.preview ? 'Enabled' : 'Disabled'}`);
             });
         }
         if (config.preview) {
-            const tweets = document.querySelectorAll('body [data-testid="tweetPhoto"] > div,[data-testid="swipe-to-dismiss"] > div > div > div > div');
+            const tweets = document.querySelectorAll('[data-testid="tweetPhoto"] > div[style^="background-image"],[data-testid="swipe-to-dismiss"] > div > div > div > div[style^="background-image"]');
             tweets.forEach((tweet) => {
-                const backgroundImage = tweet.style.backgroundImage.match(/url\(([^)]+)\)/);
-                const tweetImgUrl = getOrigImgUrl(backgroundImage ? backgroundImage[1] : '');
-                if (tweetImgUrl) {
+                const backgroundImage = tweet.style.backgroundImage.replace(/^url\(["']|["']\)$/gi, '');
+                const tweetImgUrl = getOrigImgUrl(backgroundImage);
+                if (tweetImgUrl && backgroundImage !== tweetImgUrl) {
                     tweet.style.backgroundImage = `url(${tweetImgUrl})`;
                 }
             });
         }
     };
 
-    const observer = new MutationObserver(() => {
-        replaceImgUrl();
-    });
+    const observer = new MutationObserver(() => { replaceImgUrl(); });
     observer.observe(document.body, { childList: true, subtree: true });
     replaceImgUrl();
 })();
