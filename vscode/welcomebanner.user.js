@@ -8,7 +8,6 @@
 // @match        *://*.vscode.dev/*
 // @match        *://*.github.dev/*
 // @grant        none
-// @run-at       document-end
 // ==/UserScript==
 
 (function () {
