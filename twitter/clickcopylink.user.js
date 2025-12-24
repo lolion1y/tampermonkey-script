@@ -99,7 +99,7 @@ Current: ${config.retweet ? 'Enabled' : 'Disabled'}`);
 
     function extractTweetUrl(tweetElement) {
 
-        const linkElement = tweetElement.querySelector('a[href*="/status/"] > time');
+        const linkElement = tweetElement.querySelector('a[href*="/status/"][href*="/photo/"] > time');
         if (linkElement) {
             let url = linkElement.parentElement.getAttribute('href');
             if (!url.startsWith('/')) {
