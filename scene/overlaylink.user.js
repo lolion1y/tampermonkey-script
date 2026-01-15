@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Scene APK Direct Download
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Add overlay transparent links for APK files on Scene download page
 // @author       lolion1y
 // @match        *://download.omarea.com/*
@@ -61,6 +61,7 @@
         });
     }
 
+    addOverlayLinks()
     const observer = new MutationObserver(addOverlayLinks);
     observer.observe(document.body, { childList: true, subtree: true });
 })();
